@@ -1,0 +1,56 @@
+// Secret Agent Laser Obstacle Course
+
+const int sensorPin = 0;
+const int ledPin = 9;
+const int buzzerPin = 6;
+
+// light level variable
+int lightLevel, high = 0, low = 1023;
+  
+void setup()
+{
+  // Pin Outputs
+  pinMode(ledPin, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
+
+}
+
+void loop()
+{
+
+  lightLevel = analogRead(sensorPin);
+
+  //manualTune();  SWITCHABLE!!
+  
+  autoTune(); 
+
+  analogWrite(ledPin, lightLevel);
+  analogWrite(buzzerPin, lightLevel);
+
+}
+
+void manualTune()
+{
+  
+  lightLevel = map(lightLevel, 0, 1023, 0, 255);
+  lightLevel = constrain(lightLevel, 0, 255);
+  
+} 
+
+void autoTune()
+{
+  
+  if (lightLevel < low)
+  {
+    low = lightLevel;
+  }
+
+  if (lightLevel > high)
+  {
+    high = lightLevel;
+  }
+  
+  lightLevel = map(lightLevel, low+30, high-30, 0, 255);
+  lightLevel = constrain(lightLevel, 0, 255);
+  
+}
